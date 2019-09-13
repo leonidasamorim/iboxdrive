@@ -1,0 +1,3 @@
+#URL Amigaveis pasta pages clubfix
+RewriteEngine On
+RewriteRule ^put\/(.*)?$ put.php?url=$1 [L]
