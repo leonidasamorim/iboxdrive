@@ -6,6 +6,8 @@
     $file       = str_replace('https:/', 'https://', $file);
     $file       = str_replace('http:/', 'http://', $file);
     $file       = str_replace('///', '//', $file);
+    $filebase   = explode("?", $file);
+    $file       = $filebase[0];
 
     $hosturl    = parse_url($file);
     $domainurl  = $hosturl["host"];
