@@ -1,20 +1,21 @@
 <?
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
+    error_reporting(0);
+    ini_set('display_errors', 0);
 
-    $file       = $_GET['url'];
+    $file       = $_REQUEST['url'];
     $file       = str_replace('https:/', 'https://', $file);
     $file       = str_replace('http:/', 'http://', $file);
-    $hosturl       = parse_url($file);
+    $file       = str_replace('///', '//', $file);
+
+    $hosturl    = parse_url($file);
     $domainurl  = $hosturl["host"];
     $domain     = $_SERVER['SERVER_NAME'];
     $protocol   = $_SERVER['SERVER_PROTOCOL'];
 
-
-
     if (checkRemoteFile($file)){
 
-        $folderdomain = "files/".$domainurl;
+        $folderdomain = "get/".$domainurl;
+
         if (!file_exists($folderdomain)) {
             mkdir($folderdomain);
         }
@@ -22,6 +23,8 @@
         file_put_contents($folderdomain ."/". basename($file), fopen($file, 'r'));
 
         $url = 'http://'. $domain .'/'. $folderdomain. '/'. basename($file);
+
+
         Header("Location: ". $url);
         exit;
 
