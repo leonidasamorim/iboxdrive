@@ -13,10 +13,17 @@
     $domainurl  = $hosturl["host"];
     $domain     = $_SERVER['SERVER_NAME'];
     $protocol   = $_SERVER['SERVER_PROTOCOL'];
+    $folderdomain = "get/".$domainurl;
+
+    if (file_exists($folderdomain."/".basename($file))) {
+        $url = 'http://'. $domain .'/'. $folderdomain. '/'. basename($file);
+
+        Header("Location: ". $url."?origin=cache");
+        exit;
+    }
+
 
     if (checkRemoteFile($file)){
-
-        $folderdomain = "get/".$domainurl;
 
         if (!file_exists($folderdomain)) {
             mkdir($folderdomain);
@@ -27,7 +34,7 @@
         $url = 'http://'. $domain .'/'. $folderdomain. '/'. basename($file);
 
 
-        Header("Location: ". $url);
+        Header("Location: ". $url."?origin=new");
         exit;
 
     }else{
