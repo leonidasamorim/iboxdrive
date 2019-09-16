@@ -1,6 +1,6 @@
 <html>
 <head>
-     <title>Drive Storage</title>
+     <title>iBox - Storage Drive Free</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -11,7 +11,8 @@
 </head>
 <body onload='setFocusToTextBox()'>
 <div class="jumbotron text-center">
-    <h1>Storage Drive Free</h1>
+    <h1>iBox</h1>
+  <h2>Storage Drive Free</h2>
     <p>Put your url file and get new cloud storage link</p>
 </div>
 <div class="container">
