@@ -1,7 +1,6 @@
 <?php
+include("config.php");
 
-
-const LIMIT_SITE = 1000000;
 
 error_reporting(1);
 ini_set('display_errors', 1);
@@ -19,8 +18,9 @@ $domain = $_SERVER['SERVER_NAME'];
 $protocol = $_SERVER['SERVER_PROTOCOL'];
 $folderdomain = "get/" . $domainurl;
 
+
 if (file_exists($folderdomain . "/" . basename($file))) {
-    $url = 'http://' . $domain . '/' . $folderdomain . '/' . basename($file);
+    $url = $PROTOCOL.'://' . $domain . '/' . $folderdomain . '/' . basename($file);
 
     Header("Location: " . $url . "?origin=cache");
     exit;
@@ -41,7 +41,7 @@ if (checkRemoteFile($file)) {
 
     file_put_contents($folderdomain . "/" . basename($file), fopen($file, 'r'));
 
-    $url = 'http://' . $domain . '/' . $folderdomain . '/' . basename($file);
+    $url = $PROTOCOL.'://' . $domain . '/' . $folderdomain . '/' . basename($file);
 
 
     Header("Location: " . $url . "?origin=new");

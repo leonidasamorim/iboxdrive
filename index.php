@@ -1,3 +1,6 @@
+<?php
+include("config.php");
+?>
 <html>
 <head>
      <title>iBox - Storage Drive Free</title>
@@ -24,7 +27,7 @@
     <br><br><br><br>
         <div class="form-group">
             <label for="usr">Or get direct link - Example:</label>
-            <p>http://<?=$_SERVER['SERVER_NAME']?>/put/http://yourlinkhere</p>
+            <p><?=PROTOCOL?>://<?=$_SERVER['SERVER_NAME']?>/put/http://yourlinkhere</p>
         </div>
 </form>
 </div>
