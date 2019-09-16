@@ -2,13 +2,9 @@
 
     const LIMIT_SITE = 1000000;
 
-    $PROTOCOL = 'https';
+    $PROTOCOL = 'http';
 
-    if ($_SERVER['SERVER_NAME'] == 'ibox.leonidasamorim.com.br') $PROTOCOL = 'http';
+    if ($_SERVER['SERVER_NAME'] == 'ibox.leonidasamorim.com.br') $PROTOCOL = 'https';
 
 
-
-    echo $_SERVER['SERVER_NAME'];
-    echo $PROTOCOL;
-    exit;
 ?>
