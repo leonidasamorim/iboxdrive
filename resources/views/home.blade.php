@@ -20,7 +20,7 @@
             <label for="usr">URL:</label>
             <input name="url" type="text" class="form-control" id="url" autocomplete="new-password" required>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button
+        <button type="submit" class="btn btn-primary">Submit</button>
         <br><br><br><br>
         <div class="form-group">
             <label for="usr">Or get direct link - Example:</label>
