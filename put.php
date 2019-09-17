@@ -17,10 +17,14 @@ $domainurl = $hosturl["host"];
 $domain = $_SERVER['SERVER_NAME'];
 $protocol = $_SERVER['SERVER_PROTOCOL'];
 $folderdomain = "get/" . $domainurl;
+$folderdomain_dir = $folderdomain."".dirname($hosturl["path"]);
+
+$querystring = parse_url($_REQUEST['url'], PHP_URL_QUERY);
 
 
-if (file_exists($folderdomain . "/" . basename($file))) {
-    $url = $PROTOCOL.'://' . $domain . '/' . $folderdomain . '/' . basename($file);
+
+if (file_exists($folderdomain_dir . "/" . basename($file))) {
+    $url = $PROTOCOL.'://' . $domain . '/' . $folderdomain_dir . '/' . basename($file);
 
     Header("Location: " . $url . "?origin=cache");
     exit;
@@ -35,13 +39,17 @@ if ($filesize > LIMIT_SITE) {
 
 if (checkRemoteFile($file)) {
 
-    if (!file_exists($folderdomain)) {
-        mkdir($folderdomain);
+
+    if (!file_exists($folderdomain_dir)) {
+        mkdir($folderdomain_dir, 0777, true);
     }
 
-    file_put_contents($folderdomain . "/" . basename($file), fopen($file, 'r'));
+    $fileget    = $file ."?".$querystring;
 
-    $url = $PROTOCOL.'://' . $domain . '/' . $folderdomain . '/' . basename($file);
+    $urlwebfile = $folderdomain_dir . "/" . basename($file);
+    file_put_contents($urlwebfile, fopen($fileget, 'r'));
+
+    $url = $PROTOCOL.'://' . $domain . '/' . $folderdomain_dir . '/' . basename($file);
 
 
     Header("Location: " . $url . "?origin=new");
