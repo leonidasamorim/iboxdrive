@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\Request;
 
 class WebServiceController extends Controller
 {
-    const LIMIT_SITE            = 1000000;
-    const FOLDER_PERMISSION     = '0777';
 
     public function index(Request $request)
     {
+
+        $data = $request->toCollection();
+
         $protocol              = 'http';
         $url                   = $request->get('url');
 
@@ -22,9 +23,14 @@ class WebServiceController extends Controller
     }
 
 
-    public function put()
+    public function put(Request $request)
     {
+
+        $data = $request->toCollection();
+
+        dd($data);
         echo "metodo put";
+        exit;
     }
 
 }

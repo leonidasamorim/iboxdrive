@@ -14,5 +14,5 @@
 
 Route::get('/', 'WebServiceController@index');
 
-
 Route::get('/put', 'WebServiceController@put');
+Route::post('/put', 'WebServiceController@put');

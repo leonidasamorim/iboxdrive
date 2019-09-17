@@ -15,7 +15,8 @@
     <p>Put your url file and get new cloud storage link</p>
 </div>
 <div class="container">
-    <form action="put.php" method="post">
+    <form action="put" method="post">
+        {{ csrf_field() }}
         <div class="form-group">
             <label for="usr">URL:</label>
             <input name="url" type="text" class="form-control" id="url" autocomplete="new-password" required>
