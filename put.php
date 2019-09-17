@@ -5,7 +5,17 @@ include("config.php");
 error_reporting(1);
 ini_set('display_errors', 1);
 
-$file = $_REQUEST['url'];
+$file       = $_REQUEST['url'];
+$fileget    = $_REQUEST['urlget'];
+
+if (isset($fileget)) {
+    $querystring = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
+    $file        = $fileget;
+}else{
+    $querystring = parse_url($_REQUEST['url'], PHP_URL_QUERY);
+}
+
+
 $file = str_replace('https:/', 'https://', $file);
 $file = str_replace('http:/', 'http://', $file);
 $file = str_replace('///', '//', $file);
@@ -18,9 +28,6 @@ $domain = $_SERVER['SERVER_NAME'];
 $protocol = $_SERVER['SERVER_PROTOCOL'];
 $folderdomain = "get/" . $domainurl;
 $folderdomain_dir = $folderdomain."".dirname($hosturl["path"]);
-
-$querystring = parse_url($_REQUEST['url'], PHP_URL_QUERY);
-
 
 
 if (file_exists($folderdomain_dir . "/" . basename($file))) {
