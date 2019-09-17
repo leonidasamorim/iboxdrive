@@ -5,7 +5,7 @@
     $PROTOCOL                   = 'http';
 
 
-    if ($_SERVER['SERVER_NAME'] == 'ibox.leonidasamorim.com.br') $PROTOCOL = 'https';
+    if ($_SERVER['SERVER_NAME'] == 'iboxdrive.tk') $PROTOCOL = 'https';
 
 
 ?>
