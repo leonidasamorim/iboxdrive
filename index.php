@@ -13,7 +13,7 @@ include("config.php");
 </head>
 <body onload='setFocusToTextBox()'>
 <div class="jumbotron text-center">
-    <h1>iBox</h1>
+    <h1><img src="favicon.ico" width="70"> iBox</h1>
   <h2>Storage Drive Free</h2>
     <p>Put your url file and get new cloud storage link</p>
 </div>
