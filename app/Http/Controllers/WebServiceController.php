@@ -43,6 +43,14 @@ class WebServiceController extends Controller
         $folderdomain_dir   = $folderdomain . "" . dirname($hosturl["path"]);
 
 
+        if (file_exists(storage_path('app/public')."/".$folderdomain_dir . "/" . basename($file))) {
+            $url = $protocol . '://' . $domain . '/' . $folderdomain_dir . '/' . basename($file);
+
+            Header("Location: " . $url . "?origin=cache");
+            exit;
+        }
+
+
         $filesize = $this->checkFileSize($file);
 
         if ($filesize > env('LIMIT_SIZE_FILE')) {
