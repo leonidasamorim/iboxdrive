@@ -10,14 +10,7 @@ class WebServiceController extends Controller
     public function index(Request $request)
     {
 
-        $data = $request->toCollection();
-
-        $protocol              = 'http';
-        $url                   = $request->get('url');
-
-        if ($_SERVER['SERVER_NAME'] == 'iboxdrive.tk') $protocol = 'https';
-
-
+        ($request->getHttpHost() == 'iboxdrive.tk') ?  $protocol = 'https' :  $protocol = 'http';
 
         return view('home', get_defined_vars());
     }
@@ -26,11 +19,125 @@ class WebServiceController extends Controller
     public function put(Request $request)
     {
 
-        $data = $request->toCollection();
+        $file       = $request->get('url');
+        $fileget    = $request->get('urlget');
+        ($request->getHttpHost() == 'iboxdrive.tk') ?  $protocol = 'https' :  $protocol = 'http';
 
-        dd($data);
-        echo "metodo put";
+        if (isset($fileget)) {
+            $querystring = parse_url($request->getRequestUri(), PHP_URL_QUERY);
+            $file = $fileget;
+        } else {
+            $querystring = parse_url($file, PHP_URL_QUERY);
+        }
+
+        $file       = str_replace('https:/', 'https://', $file);
+        $file       = str_replace('http:/', 'http://', $file);
+        $file       = str_replace('///', '//', $file);
+        $filebase   = explode("?", $file);
+        $file       = $filebase[0];
+
+        $hosturl            = parse_url($file);
+        $domainurl          = $hosturl["host"];
+        $domain             = $request->getHttpHost();
+        $folderdomain       = "get/" . $domainurl;
+        $folderdomain_dir   = $folderdomain . "" . dirname($hosturl["path"]);
+
+
+        $filesize = $this->checkFileSize($file);
+
+        if ($filesize > env('LIMIT_SIZE_FILE')) {
+            echo "Size larger than allowed limit. Your File:" . $filesize . " - Limit: " . env('LIMIT_SIZE_FILE');
+            exit;
+        }
+
+        if ($this->checkRemoteFile($file)) {
+
+            $storage_folder = storage_path('app/public')."/".$folderdomain_dir;
+
+
+            if (!file_exists($storage_folder)) {
+                mkdir($storage_folder, 0777, true);
+            }
+
+
+            $fileget = $file . "?" . $querystring;
+
+            $urlwebfile = storage_path('app/public')."/".$folderdomain_dir . "/" . basename($file);
+            file_put_contents($urlwebfile, fopen($fileget, 'r'));
+
+            $url = $protocol . '://' . $domain . '/' . $folderdomain_dir . '/' . basename($file);
+
+
+            Header("Location: " . $url . "?origin=new");
+            exit;
+
+        } else {
+            echo "File not found.";
+        }
+
+
+
+        echo $folderdomain_dir;
         exit;
+    }
+
+
+
+
+    public function checkRemoteFile($url)
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        // don't download content
+        curl_setopt($ch, CURLOPT_NOBODY, 1);
+        curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        $result = curl_exec($ch);
+        curl_close($ch);
+        if ($result !== FALSE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function checkFileSize($url)
+    {
+        // Assume failure.
+        $result = -1;
+
+        $curl = curl_init($url);
+
+        // Issue a HEAD request and follow any redirects.
+        curl_setopt($curl, CURLOPT_NOBODY, true);
+        curl_setopt($curl, CURLOPT_HEADER, true);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        //curl_setopt($curl, CURLOPT_USERAGENT, get_user_agent_string());
+
+        $data = curl_exec($curl);
+        curl_close($curl);
+
+        if ($data) {
+            $content_length = "unknown";
+            $status = "unknown";
+
+            if (preg_match("/^HTTP\/1\.[01] (\d\d\d)/", $data, $matches)) {
+                $status = (int)$matches[1];
+            }
+
+            if (preg_match("/Content-Length: (\d+)/", $data, $matches)) {
+                $content_length = (int)$matches[1];
+            }
+
+            // http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+            if ($status == 200 || ($status > 300 && $status <= 308)) {
+                $result = $content_length;
+            }
+        }
+
+        return $result;
     }
 
 }
