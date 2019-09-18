@@ -7,59 +7,50 @@ use App\Http\Requests\Request;
 class WebServiceController extends Controller
 {
     const LIMIT_SIZE_FILE   = 10000000;
-    const MAJOR = 1;
-    const MINOR = 2;
-    const PATCH = 3;
-
+    
     public function index(Request $request)
     {
-        $protocol   = 'http';
         $server     = $request->getHttpHost();
         $version    = $this->getVersion();
-        if ($request->getHttpHost() == 'iboxdrive.tk') $protocol = 'https';
+        $protocol   = $this->protocol($request);
 
         return view('home', get_defined_vars());
     }
 
-
     public function put(Request $request)
     {
-
         $file       = $request->get('url');
         if (!isset($file)) {
-            $fileget    = str_replace('/put/', '',$request->getRequestUri());
+            $fileGet    = str_replace('/put/', '',$request->getRequestUri());
         }
 
-        ($request->getHttpHost() == 'iboxdrive.tk') ?  $protocol = 'https' :  $protocol = 'http';
-
-        if (isset($fileget)) {
-            $querystring = parse_url($request->getRequestUri(), PHP_URL_QUERY);
-            $file = $fileget;
+        if (isset($fileGet)) {
+            $queryString = parse_url($request->getRequestUri(), PHP_URL_QUERY);
+            $file = $fileGet;
         } else {
-            $querystring = parse_url($file, PHP_URL_QUERY);
+            $queryString = parse_url($file, PHP_URL_QUERY);
         }
 
-        $file       = str_replace('https:/', 'https://', $file);
-        $file       = str_replace('http:/', 'http://', $file);
-        $file       = str_replace('///', '//', $file);
-        $filebase   = explode("?", $file);
-        $file       = $filebase[0];
+        $file               = str_replace('https:/', 'https://', $file);
+        $file               = str_replace('http:/', 'http://', $file);
+        $file               = str_replace('///', '//', $file);
+        $fileBase           = explode("?", $file);
+        $file               = $fileBase[0];
 
-
-        $hosturl            = parse_url($file);
-        $domainurl          = $hosturl["host"];
+        $hostUrl            = parse_url($file);
+        $domainUrl          = $hostUrl["host"];
         $domain             = $request->getHttpHost();
-        $folderdomain       = "get/" . $domainurl;
-        $folderdomain_dir   = $folderdomain . "" . dirname($hosturl["path"]);
+        $folderDomain       = "get/" . $domainUrl;
+        $folderDir          = $folderDomain . "" . dirname($hostUrl["path"]);
+        $protocol           = $this->protocol($request);
 
-        if (file_exists($folderdomain_dir . "/" . basename($file))) {
-            $url = $protocol . '://' . $domain . '/' . $folderdomain_dir . '/' . basename($file);
+        if (file_exists($folderDir . "/" . basename($file))) {
+            $url = $protocol . '://' . $domain . '/' . $folderDir . '/' . basename($file);
 
             Header("Location: " . $url . "?origin=cache");
             exit;
         }
-
-
+        
         $filesize = $this->checkFileSize($file);
 
         if ($filesize > WebServiceController::LIMIT_SIZE_FILE) {
@@ -68,34 +59,23 @@ class WebServiceController extends Controller
         }
 
         if ($this->checkRemoteFile($file)) {
-
-            $storage_folder = $folderdomain_dir;
-
-
-            if (!file_exists($storage_folder)) {
-                mkdir($storage_folder, 0777, true);
+            
+            if (!file_exists($folderDir)) {
+                mkdir($folderDir, 0777, true);
             }
 
+            $fileGet = $file . "?" . $queryString;
 
-            $fileget = $file . "?" . $querystring;
+            $urlWebFile = $folderDir . "/" . basename($file);
+            file_put_contents($urlWebFile, fopen($fileGet, 'r'));
 
-            $urlwebfile = $folderdomain_dir . "/" . basename($file);
-            file_put_contents($urlwebfile, fopen($fileget, 'r'));
-
-            $url = $protocol . '://' . $domain . '/' . $folderdomain_dir . '/' . basename($file);
-
+            $url = $protocol . '://' . $domain . '/' . $folderDir . '/' . basename($file);
 
             Header("Location: " . $url . "?origin=new");
             exit;
-
         } else {
             echo "File not found.";
         }
-
-
-
-        echo $folderdomain_dir;
-        exit;
     }
 
 
@@ -160,6 +140,10 @@ class WebServiceController extends Controller
     public static function getVersion()
     {
         return substr(file_get_contents('../.git/refs/heads/master'),0,8);
+    }
+
+    public function protocol($request) {
+        return  ($request->getHttpHost() == 'iboxdrive.tk') ?  $protocol = 'https' :  $protocol = 'http';
     }
 
 }
