@@ -5,13 +5,13 @@ include("config.php");
 error_reporting(1);
 ini_set('display_errors', 1);
 
-$file       = $_REQUEST['url'];
-$fileget    = $_REQUEST['urlget'];
+$file = $_REQUEST['url'];
+$fileget = $_REQUEST['urlget'];
 
 if (isset($fileget)) {
     $querystring = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY);
-    $file        = $fileget;
-}else{
+    $file = $fileget;
+} else {
     $querystring = parse_url($_REQUEST['url'], PHP_URL_QUERY);
 }
 
@@ -27,11 +27,11 @@ $domainurl = $hosturl["host"];
 $domain = $_SERVER['SERVER_NAME'];
 $protocol = $_SERVER['SERVER_PROTOCOL'];
 $folderdomain = "get/" . $domainurl;
-$folderdomain_dir = $folderdomain."".dirname($hosturl["path"]);
+$folderdomain_dir = $folderdomain . "" . dirname($hosturl["path"]);
 
 
 if (file_exists($folderdomain_dir . "/" . basename($file))) {
-    $url = $PROTOCOL.'://' . $domain . '/' . $folderdomain_dir . '/' . basename($file);
+    $url = $PROTOCOL . '://' . $domain . '/' . $folderdomain_dir . '/' . basename($file);
 
     Header("Location: " . $url . "?origin=cache");
     exit;
@@ -40,7 +40,7 @@ if (file_exists($folderdomain_dir . "/" . basename($file))) {
 $filesize = checkFileSize($file);
 
 if ($filesize > LIMIT_SITE) {
-    echo "Size larger than allowed limit. Your File:". $filesize . " - Limit: ". LIMIT_SITE;
+    echo "Size larger than allowed limit. Your File:" . $filesize . " - Limit: " . LIMIT_SITE;
     exit;
 }
 
@@ -51,12 +51,12 @@ if (checkRemoteFile($file)) {
         mkdir($folderdomain_dir, 0777, true);
     }
 
-    $fileget    = $file ."?".$querystring;
+    $fileget = $file . "?" . $querystring;
 
     $urlwebfile = $folderdomain_dir . "/" . basename($file);
     file_put_contents($urlwebfile, fopen($fileget, 'r'));
 
-    $url = $PROTOCOL.'://' . $domain . '/' . $folderdomain_dir . '/' . basename($file);
+    $url = $PROTOCOL . '://' . $domain . '/' . $folderdomain_dir . '/' . basename($file);
 
 
     Header("Location: " . $url . "?origin=new");
