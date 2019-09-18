@@ -47,8 +47,7 @@ class WebServiceController extends Controller
         $folderdomain       = "get/" . $domainurl;
         $folderdomain_dir   = $folderdomain . "" . dirname($hosturl["path"]);
 
-
-        if (file_exists(storage_path('app/public')."/".$folderdomain_dir . "/" . basename($file))) {
+        if (file_exists($folderdomain_dir . "/" . basename($file))) {
             $url = $protocol . '://' . $domain . '/' . $folderdomain_dir . '/' . basename($file);
 
             Header("Location: " . $url . "?origin=cache");
@@ -65,7 +64,7 @@ class WebServiceController extends Controller
 
         if ($this->checkRemoteFile($file)) {
 
-            $storage_folder = storage_path('app/public')."/".$folderdomain_dir;
+            $storage_folder = $folderdomain_dir;
 
 
             if (!file_exists($storage_folder)) {
@@ -75,7 +74,7 @@ class WebServiceController extends Controller
 
             $fileget = $file . "?" . $querystring;
 
-            $urlwebfile = storage_path('app/public')."/".$folderdomain_dir . "/" . basename($file);
+            $urlwebfile = $folderdomain_dir . "/" . basename($file);
             file_put_contents($urlwebfile, fopen($fileget, 'r'));
 
             $url = $protocol . '://' . $domain . '/' . $folderdomain_dir . '/' . basename($file);

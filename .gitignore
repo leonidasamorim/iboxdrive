@@ -16,5 +16,6 @@ npm-debug.logchec
 yarn-error.log
 /storage/*
 /public/storage
+/public/get
 .htaccess
 
