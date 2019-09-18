@@ -16,7 +16,7 @@ class WebServiceController extends Controller
         $protocol   = 'http';
         $server     = $request->getHttpHost();
         $version    = $this->getVersion();
-        ($request->getHttpHost() == 'iboxdrive.tk') ??  $protocol = 'https';
+        if ($request->getHttpHost() == 'iboxdrive.tk') $protocol = 'https';
 
         return view('home', get_defined_vars());
     }
