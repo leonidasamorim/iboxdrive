@@ -164,7 +164,7 @@ class WebServiceController extends Controller
         $commitDate = new \DateTime(trim(exec('git log -n1 --pretty=%ci HEAD')));
         $commitDate->setTimezone(new \DateTimeZone('UTC'));
 
-        return sprintf('v%s.%s.%s-dev.%s (%s)', self::MAJOR, self::MINOR, self::PATCH, $commitHash, $commitDate->format('Y-m-d H:i:s'));
+        return sprintf('v%s.%s.%s-dev.%s', self::MAJOR, self::MINOR, self::PATCH, $commitHash);
     }
 
 }
