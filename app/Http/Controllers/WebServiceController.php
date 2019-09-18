@@ -159,12 +159,7 @@ class WebServiceController extends Controller
 
     public static function getVersion()
     {
-        $commitHash = trim(exec('git log --pretty="%h" -n1 HEAD'));
-
-        $commitDate = new \DateTime(trim(exec('git log -n1 --pretty=%ci HEAD')));
-        $commitDate->setTimezone(new \DateTimeZone('UTC'));
-
-        return sprintf('v%s.%s.%s-dev.%s', self::MAJOR, self::MINOR, self::PATCH, $commitHash);
+        return substr(file_get_contents('../.git/refs/heads/master'),0,8);
     }
 
 }
