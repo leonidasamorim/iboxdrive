@@ -7,11 +7,16 @@ use App\Http\Requests\Request;
 class WebServiceController extends Controller
 {
     const LIMIT_SIZE_FILE   = 10000000;
+    const MAJOR = 1;
+    const MINOR = 2;
+    const PATCH = 3;
 
     public function index(Request $request)
     {
 
         ($request->getHttpHost() == 'iboxdrive.tk') ?  $protocol = 'https' :  $protocol = 'http';
+
+        $version = WebServiceController::getVersion();
 
         return view('home', get_defined_vars());
     }
@@ -150,6 +155,16 @@ class WebServiceController extends Controller
         }
 
         return $result;
+    }
+
+    public static function getVersion()
+    {
+        $commitHash = trim(exec('git log --pretty="%h" -n1 HEAD'));
+
+        $commitDate = new \DateTime(trim(exec('git log -n1 --pretty=%ci HEAD')));
+        $commitDate->setTimezone(new \DateTimeZone('UTC'));
+
+        return sprintf('v%s.%s.%s-dev.%s (%s)', self::MAJOR, self::MINOR, self::PATCH, $commitHash, $commitDate->format('Y-m-d H:i:s'));
     }
 
 }
