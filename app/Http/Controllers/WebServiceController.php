@@ -6,6 +6,7 @@ use App\Http\Requests\Request;
 
 class WebServiceController extends Controller
 {
+    const LIMIT_SIZE_FILE   = 10000000;
 
     public function index(Request $request)
     {
@@ -57,8 +58,8 @@ class WebServiceController extends Controller
 
         $filesize = $this->checkFileSize($file);
 
-        if ($filesize > env('LIMIT_SIZE_FILE')) {
-            echo "Size larger than allowed limit. Your File:" . $filesize . " - Limit: " . env('LIMIT_SIZE_FILE');
+        if ($filesize > WebServiceController::LIMIT_SIZE_FILE) {
+            echo "Size larger than allowed limit. Your File:" . $filesize . " - Limit: " . WebServiceController::LIMIT_SIZE_FILE;
             exit;
         }
 
