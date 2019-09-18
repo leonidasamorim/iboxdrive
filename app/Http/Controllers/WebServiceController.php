@@ -13,10 +13,10 @@ class WebServiceController extends Controller
 
     public function index(Request $request)
     {
-
-        ($request->getHttpHost() == 'iboxdrive.tk') ?  $protocol = 'https' :  $protocol = 'http';
-
-        $version = WebServiceController::getVersion();
+        $protocol   = 'http';
+        $server     = $request->getHttpHost();
+        $version    = $this->getVersion();
+        ($request->getHttpHost() == 'iboxdrive.tk') ??  $protocol = 'https';
 
         return view('home', get_defined_vars());
     }

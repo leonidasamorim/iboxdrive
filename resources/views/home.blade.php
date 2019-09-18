@@ -25,7 +25,7 @@
         <br><br><br><br>
         <div class="form-group">
             <label for="usr">Or get direct link - Example:</label>
-            <p><?=$protocol?>://<?=$_SERVER['SERVER_NAME']?>/put/http://yourlinkhere</p>
+            <p><?=$protocol?>://<?=$server?>/put/http://yourlinkhere</p>
         </div>
     </form>
 </div>
