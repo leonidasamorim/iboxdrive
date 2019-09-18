@@ -20,7 +20,10 @@ class WebServiceController extends Controller
     {
 
         $file       = $request->get('url');
-        $fileget    = $request->get('urlget');
+        if (!isset($file)) {
+            $fileget    = str_replace('/put/', '',$request->getRequestUri());
+        }
+
         ($request->getHttpHost() == 'iboxdrive.tk') ?  $protocol = 'https' :  $protocol = 'http';
 
         if (isset($fileget)) {
@@ -35,6 +38,7 @@ class WebServiceController extends Controller
         $file       = str_replace('///', '//', $file);
         $filebase   = explode("?", $file);
         $file       = $filebase[0];
+
 
         $hosturl            = parse_url($file);
         $domainurl          = $hosturl["host"];

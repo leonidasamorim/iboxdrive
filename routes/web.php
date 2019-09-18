@@ -14,5 +14,7 @@
 
 Route::get('/', 'WebServiceController@index');
 
-Route::get('/put', 'WebServiceController@put');
+Route::get('put/{search}', 'WebServiceController@put')->where('search', '.*');
+
+//Route::get('/put/{*}', 'WebServiceController@put');
 Route::post('/put', 'WebServiceController@put');
