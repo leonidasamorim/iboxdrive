@@ -36,7 +36,7 @@
 
         <!-- Copyright -->
         <div class="footer-copyright text-center py-3">© <?=date('Y')?> Copyright:
-            <a href="."> IboxDrive</a> - v1.4
+            <a href="."> IboxDrive</a> - v1.5
         </div>
         <!-- Copyright -->
 
